@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>To'lov tizimi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
     <style>
-        .hidden {
-            display: none;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
         .button {
             padding: 10px 15px;
             background-color: #007bff;
@@ -17,8 +36,17 @@
             cursor: pointer;
             margin: 5px;
         }
+
         .button:hover {
             background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .teachers-list {
+            margin-top: 20px;
         }
     </style>
     <script>
@@ -33,35 +61,41 @@
     </script>
 </head>
 <body>
-    <h1>Students</h1>
+    <div class="container">
+        <h1>Home Page</h1>
 
-    {% if request.user.is_authenticated %}
-        <a class="button" href="{% url 'users:logout' %}">Logout</a>
-    {% else %}
-        <a class="button" href="{% url 'users:login' %}">Login</a>
-        <a class="button" href="{% url 'users:register' %}">Register</a>
-    {% endif %}
+        {% if request.user.is_authenticated %}
+            <a class="button" href="{% url 'users:logout' %}">Logout</a>
+        {% else %}
+            <a class="button" href="{% url 'users:login' %}">Login</a>
+            <a class="button" href="{% url 'users:register' %}">Register</a>
+        {% endif %}
 
-    {% if request.user.is_staff %}
-        <button class="button" onclick="toggleTeachers()">Show Teachers</button>
-    {% endif %}
+        {% if request.user.is_staff %}
+                    <a class="button" href="{% url 'create_group' %}">Create_group</a>
 
-    <div id="teachers-list" class="hidden">
-        <h2>Teachers and Their Groups</h2>
-        <ul>
-            {% for teacher in teachers %}
-                <li>
-                    <strong>{{ teacher.name }}</strong>
-                    <ul>
-                        {% for group in teacher.groups.all %}
-                            <li>
-                                <a href="{% url 'group_students' group.id %}">{{ group.name }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
+            <button class="button" onclick="toggleTeachers()">Show Teachers</button>
+        {% endif %}
+
+        <div id="teachers-list" class="hidden teachers-list">
+            <h2>Teachers and Their Groups</h2>
+            <ul>
+                {% for teacher in teachers %}
+                    <li>
+                        <strong>{{ teacher.name }}</strong>
+                        <ul>
+                            {% for group in teacher.groups.all %}
+                                <li>
+                                    <a href="{% url 'group_students' group.id %}">{{ group.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% empty %}
+                    <li>No teachers found.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 </html>

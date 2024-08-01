@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Guruh Yaratish</title>
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+    <h1>Yangi Guruh Yaratish</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="group_name">Guruh Nomi:</label>
+            <input type="text" id="group_name" name="group_name" required>
+        </div>
+        <div>
+            <label for="teacher_id">O'qituvchi:</label>
+            <select id="teacher_id" name="teacher_id" required>
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Guruhni Yaratish</button>
+    </form>
+    <a href="{% url 'home' %}">Orqaga</a>
+</body>
+</html>
