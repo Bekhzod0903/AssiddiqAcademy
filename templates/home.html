@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To'lov tizimi</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function toggleTeachers() {
+            const teachersList = document.getElementById('teachers-list');
+            if (teachersList.classList.contains('hidden')) {
+                teachersList.classList.remove('hidden');
+            } else {
+                teachersList.classList.add('hidden');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Students</h1>
+
+    {% if request.user.is_authenticated %}
+        <a class="button" href="{% url 'users:logout' %}">Logout</a>
+    {% else %}
+        <a class="button" href="{% url 'users:login' %}">Login</a>
+        <a class="button" href="{% url 'users:register' %}">Register</a>
+    {% endif %}
+
+    {% if request.user.is_staff %}
+        <button class="button" onclick="toggleTeachers()">Show Teachers</button>
+    {% endif %}
+
+    <div id="teachers-list" class="hidden">
+        <h2>Teachers and Their Groups</h2>
+        <ul>
+            {% for teacher in teachers %}
+                <li>
+                    <strong>{{ teacher.name }}</strong>
+                    <ul>
+                        {% for group in teacher.groups.all %}
+                            <li>
+                                <a href="{% url 'group_students' group.id %}">{{ group.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

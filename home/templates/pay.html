@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pay for {{ student.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .message {
+            color: green; /* Color for success message */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pay for {{ student.name }}</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="amount">Enter Amount:</label>
+        <input type="number" name="amount" required>
+        <button type="submit">Pay</button>
+    </form>
+    <a href="{% url 'group_students' student.group.id %}">Cancel</a>
+</body>
+</html>
